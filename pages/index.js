@@ -1,37 +1,8 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
+import React from 'react';
 import appConfig from '../config.json'
+import { Router, useRouter } from 'next/router'
 
-// RESETS CSS
-function GlobalStyle() {
-  return (
-    <style global jsx> {`
-        * {
-          // border: 1px solid red !important;
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          list-style: none;
-        }
-        body {
-          font-family: 'Open Sans', sans-serif;
-        }
-        /* App fit Height */ 
-        html, body, #__next {
-          min-height: 100vh;
-          display: flex;
-          flex: 1;
-        }
-        #__next {
-          flex: 1;
-        }
-        #__next > * {
-          flex: 1;
-        }
-        /* ./App fit Height */ 
-      `}
-    </style>
-  );
-}
 
 
 // This is a React component!
@@ -39,7 +10,7 @@ function Titulo(props) {
   // console.log(props);
   
   const Tag = props.tag || 'h1';
-  console.log(Tag)
+  // console.log(Tag)
 
 
   return (
@@ -115,11 +86,23 @@ function Main(props) {
 // --------------------------------------------------
 
 export default function PaginaInicial() {
-  const username = 'Abraao-S';
+  // const username = 'Abraao-S';
+  
+  const [username, setUsername] = React.useState('Abraao-S'); // here we are not creating any array but using the one that already exists! Only that with this syntax before the equal sign (=) we are specifynig which items from the array that we want!
+
+  const routing = useRouter();
+  // console.log(routing);
+
+  
+  // console.log('stateDoReact', stateDoReact);
+  // console.log(username);
+  
+  // 
+  // const stateDoReact = React.useState('Abraao-S');
+
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -143,9 +126,17 @@ export default function PaginaInicial() {
             backgroundColor: appConfig.theme.colors.neutrals[700],
           }}
         >
-          {/* Formulário */}
+          {/* Form */}
           <Box
             as="form"
+            onSubmit={ function (eventInfos) {
+              eventInfos.preventDefault();  // this prevents the page from reloading
+              console.log('form submitted');
+              // alert('funfou');
+              
+              routing.push('/chat');
+              // window.location.href = '/chat';
+            }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -156,8 +147,38 @@ export default function PaginaInicial() {
               {appConfig.name}
             </Text>
 
+            {/* <input 
+              type="text"
+              value={username}
+              onChange = {function handler(event) {
+                console.log('user typed: ' + event.target.value);
+                
+                // where's the value?  
+                const valor = event.target.value;
+
+                // change the value for the variable using React!
+                setUsername(valor);
+
+                }
+              }
+            /> */}
+            
             <TextField
-              fullWidth
+              value={username}
+
+              onChange = {function handler(event) {
+                console.log('user typed: ' + event.target.value);
+                
+                // where's the value?  
+                const valor = event.target.value;
+
+                // change the value for the variable using React!
+                setUsername(valor);
+
+                }
+              }
+
+              fullWidth  
               textFieldColors={{
                 neutral: {
                   textColor: appConfig.theme.colors.neutrals[200],
@@ -167,6 +188,8 @@ export default function PaginaInicial() {
                 },
               }}
             />
+
+
             <Button
               type='submit'
               label='Entrar'
@@ -179,7 +202,7 @@ export default function PaginaInicial() {
               }}
             />
           </Box>
-          {/* Formulário */}
+          {/* /Form */}
 
 
           {/* Photo Area */}
@@ -217,7 +240,7 @@ export default function PaginaInicial() {
               {username}
             </Text>
           </Box>
-          {/* Photo Area */}
+          {/* /Photo Area */}
         </Box>
       </Box>
     </>
