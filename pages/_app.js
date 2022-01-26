@@ -33,6 +33,7 @@ function GlobalStyle() {
 export default function CustomApp({ Component, pageProps }) {
     console.log("WORKING: code inside '_app.js' that runs in ALL PAGES");
     return (
+        
         <>
             
             <GlobalStyle></GlobalStyle>
