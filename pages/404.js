@@ -1,7 +1,10 @@
-export default function PageNotFound() {
+
+
+export default function PageNotFound() {    
     return (
-        <div>
-            PAGE NOT FOUND
-        </div>
+        <>
+            <img src="/assets/images/error404.gif" alt="page not found gif" />
+            <img src="/assets/images/error404.gif" alt="page not found gif" />
+        </>
     )
 }

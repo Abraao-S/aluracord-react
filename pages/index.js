@@ -4,11 +4,10 @@ import appConfig from '../config.json'
 import { Router, useRouter } from 'next/router'
 
 
-
 // This is a React component!
 function Titulo(props) {
   // console.log(props);
-  
+
   const Tag = props.tag || 'h1';
   // console.log(Tag)
 
@@ -87,16 +86,16 @@ function Main(props) {
 
 export default function PaginaInicial() {
   // const username = 'Abraao-S';
-  
+
   const [username, setUsername] = React.useState('Abraao-S'); // here we are not creating any array but using the one that already exists! Only that with this syntax before the equal sign (=) we are specifynig which items from the array that we want!
 
   const routing = useRouter();
   // console.log(routing);
 
-  
+
   // console.log('stateDoReact', stateDoReact);
   // console.log(username);
-  
+
   // 
   // const stateDoReact = React.useState('Abraao-S');
 
@@ -129,11 +128,11 @@ export default function PaginaInicial() {
           {/* Form */}
           <Box
             as="form"
-            onSubmit={ function (eventInfos) {
+            onSubmit={function (eventInfos) {
               eventInfos.preventDefault();  // this prevents the page from reloading
               console.log('form submitted');
               // alert('funfou');
-              
+
               routing.push('/chat');
               // window.location.href = '/chat';
             }}
@@ -162,23 +161,23 @@ export default function PaginaInicial() {
                 }
               }
             /> */}
-            
+
             <TextField
               value={username}
 
-              onChange = {function handler(event) {
+              onChange={function handler(event) {
                 console.log('user typed: ' + event.target.value);
-                
-                // where's the value?  
+
+                // where is the value?  
                 const valor = event.target.value;
 
                 // change the value for the variable using React!
                 setUsername(valor);
 
-                }
+              }
               }
 
-              fullWidth  
+              fullWidth
               textFieldColors={{
                 neutral: {
                   textColor: appConfig.theme.colors.neutrals[200],
