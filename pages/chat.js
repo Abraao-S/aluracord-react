@@ -1,6 +1,15 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React, { useState } from 'react';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js'
+
+// SUPABASE
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzUwMDEyOSwiZXhwIjoxOTU5MDc2MTI5fQ.s73XeVFId_AgL46oqn4at9otP4AZKzJCzKPaUXj0SVY';
+const URL = 'https://hjaivdpoxgzvcevmrkrs.supabase.co';
+const supabaseClient = createClient(URL, SUPABASE_ANON_KEY);
+
+
+
 
 export default function ChatPage() {
     /** REQUISITES:
@@ -23,18 +32,43 @@ export default function ChatPage() {
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
 
+    // calls the supabase back-end, encapsulated inside a useEffect() method to prevent from making a request every time any change on the page happens.
+    React.useEffect( () => {    // by default, the useEffect() function runs only when the page first loads. But we can change that using the array at the end of the function.
+        supabaseClient
+            .from('mensagens')
+            .select('*')
+            .order('id', {ascending: false})
+            .then( ( {data} ) => {
+                console.log("Query result: ", data);    
+                setListaDeMensagens(data);
+        } );
+    }, []); // here, inside this array at the end, we can pass a component to watch, meaning that every time any change happens to that component we run the useEffect() function. If we would pass "listaDeMensagens" here inside this array every time some change happened it would make another request to the server. The problem with that is when the server responds that counts as a change so it makes an eternal loop of requests and responses that would take down our server!
+
 
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-            id: listaDeMensagens.length + 1,
-            de: 'remetente',
+            // id: listaDeMensagens.length + 1,
+            de: 'abraao-s',
             texto: novaMensagem,
         };
 
-        setListaDeMensagens([
-            mensagem,
-            ...listaDeMensagens,
-        ]);
+        supabaseClient
+            .from('mensagens')
+            .insert([
+                // Tem que ser um objeto com os MESMOS CAMPOS que estão no supabase
+                mensagem
+            ])
+            .then( ( {data} ) => {
+                console.log(`Criando mensagem: ${data}`);
+                
+                setListaDeMensagens([
+                    data[0],
+                    ...listaDeMensagens,
+                ]);
+
+            });
+
+        
 
         setMensagem('');
     }
@@ -220,7 +254,7 @@ function MessageList(props) {
                                     display: 'inline-block',
                                     marginRight: '8px',
                                 }}
-                                src={`https://github.com/vanessametonini.png`}
+                                src={`https://github.com/${mensagem.de}.png`}
                             />
                             <Text tag="strong">
                                 {mensagem.de}
